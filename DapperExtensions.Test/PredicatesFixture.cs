@@ -4,13 +4,13 @@ using System.Linq;
 using DapperExtensions.Mapper;
 using DapperExtensions.Sql;
 using DapperExtensions.Test.Helpers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.Protected;
-using NUnit.Framework;
 
 namespace DapperExtensions.Test
 {
-    [TestFixture]
+    [TestClass]
     public class PredicatesFixture
     {
         public abstract class PredicatesFixtureBase
@@ -19,7 +19,7 @@ namespace DapperExtensions.Test
             protected Mock<ISqlGenerator> Generator;
             protected Mock<IDapperExtensionsConfiguration> Configuration;
                 
-            [SetUp]
+            [TestInitialize]
             public void Setup()
             {
                 @SqlDialect = new Mock<ISqlDialect>();
@@ -32,10 +32,10 @@ namespace DapperExtensions.Test
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class PredicatesTests : PredicatesFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void Field_ReturnsSetupPredicate()
             {
                 var predicate = Predicates.Field<PredicateTestEntity>(f => f.Name, Operator.Like, "Lead", true);
@@ -45,7 +45,7 @@ namespace DapperExtensions.Test
                 Assert.AreEqual(true, predicate.Not);
             }
 
-            [Test]
+            [TestMethod]
             public void Property_ReturnsSetupPredicate()
             {
                 var predicate = Predicates.Property<PredicateTestEntity, PredicateTestEntity2>(f => f.Name, Operator.Le, f => f.Value, true);
@@ -55,7 +55,7 @@ namespace DapperExtensions.Test
                 Assert.AreEqual(true, predicate.Not);
             }
 
-            [Test]
+            [TestMethod]
             public void Group_ReturnsSetupPredicate()
             {
                 Mock<IPredicate> subPredicate = new Mock<IPredicate>();
@@ -65,7 +65,7 @@ namespace DapperExtensions.Test
                 Assert.AreEqual(subPredicate.Object, predicate.Predicates[0]);
             }
 
-            [Test]
+            [TestMethod]
             public void Exists_ReturnsSetupPredicate()
             {
                 Mock<IPredicate> subPredicate = new Mock<IPredicate>();
@@ -74,7 +74,7 @@ namespace DapperExtensions.Test
                 Assert.AreEqual(true, predicate.Not);
             }
 
-            [Test]
+            [TestMethod]
             public void Between_ReturnsSetupPredicate()
             {
                 BetweenValues values = new BetweenValues();
@@ -84,7 +84,7 @@ namespace DapperExtensions.Test
                 Assert.AreEqual(true, predicate.Not);
             }
 
-            [Test]
+            [TestMethod]
             public void Sort__ReturnsSetupPredicate()
             {
                 var predicate = Predicates.Sort<PredicateTestEntity>(f => f.Name, false);
@@ -93,24 +93,24 @@ namespace DapperExtensions.Test
             }            
         }
 
-        [TestFixture]
+        [TestClass]
         public class BasePredicateTests : PredicatesFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void GetColumnName_WhenMapNotFound_ThrowsException()
             {
                 Mock<BasePredicate> predicate = new Mock<BasePredicate>();
                 predicate.CallBase = true;
                 Configuration.Setup(c => c.GetMap(typeof(PredicateTestEntity))).Returns(() => null).Verifiable();
 
-                var ex = Assert.Throws<NullReferenceException>(() => predicate.Object.TestProtected().RunMethod<string>("GetColumnName", typeof(PredicateTestEntity), Generator.Object, "Name"));
+                var ex = Assert.ThrowsException<NullReferenceException>(() => predicate.Object.TestProtected().RunMethod<string>("GetColumnName", typeof(PredicateTestEntity), Generator.Object, "Name"));
 
                 Configuration.Verify();
 
                 StringAssert.StartsWith("Map was not found", ex.Message);
             }
 
-            [Test]
+            [TestMethod]
             public void GetColumnName_WhenPropertyNotFound_ThrowsException()
             {
                 Mock<IClassMapper> classMapper = new Mock<IClassMapper>();
@@ -121,7 +121,7 @@ namespace DapperExtensions.Test
                 Configuration.Setup(c => c.GetMap(typeof(PredicateTestEntity))).Returns(classMapper.Object).Verifiable();
                 classMapper.SetupGet(c => c.Properties).Returns(propertyMaps).Verifiable();
 
-                var ex = Assert.Throws<NullReferenceException>(() => predicate.Object.TestProtected().RunMethod<string>("GetColumnName", typeof(PredicateTestEntity), Generator.Object, "Name"));
+                var ex = Assert.ThrowsException<NullReferenceException>(() => predicate.Object.TestProtected().RunMethod<string>("GetColumnName", typeof(PredicateTestEntity), Generator.Object, "Name"));
 
                 Configuration.Verify();
                 classMapper.Verify();
@@ -129,7 +129,7 @@ namespace DapperExtensions.Test
                 StringAssert.StartsWith("Name was not found", ex.Message);
             }
 
-            [Test]
+            [TestMethod]
             public void GetColumnName_GetsColumnName()
             {
                 Mock<IClassMapper> classMapper = new Mock<IClassMapper>();
@@ -154,10 +154,10 @@ namespace DapperExtensions.Test
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class ComparePredicateTests : PredicatesFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void GetOperatorString_ReturnsOperatorStrings()
             {
                 Assert.AreEqual("=", Setup(Operator.Eq, false).Object.GetOperatorString());
@@ -184,10 +184,10 @@ namespace DapperExtensions.Test
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class FieldPredicateTests : PredicatesFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void GetSql_NullValue_ReturnsProperSql()
             {
                 var predicate = Setup<PredicateTestEntity>("Name", Operator.Eq, null, false);
@@ -201,7 +201,7 @@ namespace DapperExtensions.Test
                 Assert.AreEqual("(fooCol IS NULL)", sql);
             }
 
-            [Test]
+            [TestMethod]
             public void GetSql_NullValue_Not_ReturnsProperSql()
             {
                 var predicate = Setup<PredicateTestEntity>("Name", Operator.Eq, null, true);
@@ -215,20 +215,20 @@ namespace DapperExtensions.Test
                 Assert.AreEqual("(fooCol IS NOT NULL)", sql);
             }
 
-            [Test]
+            [TestMethod]
             public void GetSql_Enumerable_NotEqOperator_ReturnsProperSql()
             {
                 var predicate = Setup<PredicateTestEntity>("Name", Operator.Le, new[] { "foo", "bar" }, false);
                 var parameters = new Dictionary<string, object>();
 
-                var ex = Assert.Throws<ArgumentException>(() => predicate.Object.GetSql(Generator.Object, parameters));
+                var ex = Assert.ThrowsException<ArgumentException>(() => predicate.Object.GetSql(Generator.Object, parameters));
 
                 predicate.Verify();
 
                 StringAssert.StartsWith("Operator must be set to Eq for Enumerable types", ex.Message);
             }
 
-            [Test]
+            [TestMethod]
             public void GetSql_Enumerable_ReturnsProperSql()
             {
                 var predicate = Setup<PredicateTestEntity>("Name", Operator.Eq, new[] { "foo", "bar" }, false);
@@ -244,7 +244,7 @@ namespace DapperExtensions.Test
                 Assert.AreEqual("(fooCol IN (@Name_0, @Name_1))", sql);
             }
 
-            [Test]
+            [TestMethod]
             public void GetSql_Enumerable_Not_ReturnsProperSql()
             {
                 var predicate = Setup<PredicateTestEntity>("Name", Operator.Eq, new[] { "foo", "bar" }, true);
@@ -260,7 +260,7 @@ namespace DapperExtensions.Test
                 Assert.AreEqual("(fooCol NOT IN (@Name_0, @Name_1))", sql);
             }
 
-            [Test]
+            [TestMethod]
             public void GetSql_ReturnsProperSql()
             {
                 var predicate = Setup<PredicateTestEntity>("Name", Operator.Eq, 12, true);
@@ -289,10 +289,10 @@ namespace DapperExtensions.Test
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class PropertyPredicateTests : PredicatesFixtureBase
         {           
-            [Test]
+            [TestMethod]
             public void GetSql_ReturnsProperSql()
             {
                 var predicate = Setup<PredicateTestEntity, PredicateTestEntity2>("Name", Operator.Eq, "Value", false);
@@ -323,10 +323,10 @@ namespace DapperExtensions.Test
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class BetweenPredicateTests : PredicatesFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void GetSql_ReturnsProperSql()
             {
                 var predicate = Setup<PredicateTestEntity>("Name", Operator.Eq, 12, 20, false);
@@ -342,7 +342,7 @@ namespace DapperExtensions.Test
                 Assert.AreEqual("(fooCol BETWEEN @Name_0 AND @Name_1)", sql);
             }
 
-            [Test]
+            [TestMethod]
             public void GetSql_Not_ReturnsProperSql()
             {
                 var predicate = Setup<PredicateTestEntity>("Name", Operator.Eq, 12, 20, true);
@@ -371,10 +371,10 @@ namespace DapperExtensions.Test
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class PredicateGroupTests : PredicatesFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void EmptyPredicate__CreatesNoOp_And_ReturnsProperSql()
             {
                 Mock<IPredicate> subPredicate1 = new Mock<IPredicate>();
@@ -395,7 +395,7 @@ namespace DapperExtensions.Test
                 Assert.AreEqual("(1=1)", sql); 
             }
 
-            [Test]
+            [TestMethod]
             public void GetSql_And_ReturnsProperSql()
             {
                 Mock<IPredicate> subPredicate1 = new Mock<IPredicate>();
@@ -413,7 +413,7 @@ namespace DapperExtensions.Test
                 Assert.AreEqual("(subSql AND subSql)", sql);
             }
 
-            [Test]
+            [TestMethod]
             public void GetSql_Or_ReturnsProperSql()
             {
                 Mock<IPredicate> subPredicate1 = new Mock<IPredicate>();
@@ -441,10 +441,10 @@ namespace DapperExtensions.Test
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class ExistsPredicateTests : PredicatesFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void GetSql_WithoutNot_ReturnsProperSql()
             {
                 Mock<IPredicate> subPredicate = new Mock<IPredicate>();
@@ -465,7 +465,7 @@ namespace DapperExtensions.Test
                 Assert.AreEqual("(EXISTS (SELECT 1 FROM subTable WHERE subSql))", sql);
             }
 
-            [Test]
+            [TestMethod]
             public void GetSql_WithNot_ReturnsProperSql()
             {
                 Mock<IPredicate> subPredicate = new Mock<IPredicate>();
@@ -486,7 +486,7 @@ namespace DapperExtensions.Test
                 Assert.AreEqual("(NOT EXISTS (SELECT 1 FROM subTable WHERE subSql))", sql);
             }
 
-            [Test]
+            [TestMethod]
             public void GetClassMapper_NoMapFound_ThrowsException()
             {
                 var predicate = new Mock<ExistsPredicate<PredicateTestEntity>>();
@@ -494,14 +494,14 @@ namespace DapperExtensions.Test
 
                 Configuration.Setup(c => c.GetMap(typeof(PredicateTestEntity2))).Returns(() => null).Verifiable();
 
-                var ex = Assert.Throws<NullReferenceException>(() => predicate.Object.TestProtected().RunMethod<IClassMapper>("GetClassMapper", typeof(PredicateTestEntity2), Configuration.Object));
+                var ex = Assert.ThrowsException<NullReferenceException>(() => predicate.Object.TestProtected().RunMethod<IClassMapper>("GetClassMapper", typeof(PredicateTestEntity2), Configuration.Object));
 
                 Configuration.Verify();
 
                 StringAssert.StartsWith("Map was not found", ex.Message);
             }
 
-            [Test]
+            [TestMethod]
             public void GetClassMapper_ReturnsMap()
             {
                 Mock<IClassMapper> classMap = new Mock<IClassMapper>();

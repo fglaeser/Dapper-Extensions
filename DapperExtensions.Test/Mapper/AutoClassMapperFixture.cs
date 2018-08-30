@@ -3,24 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DapperExtensions.Mapper;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DapperExtensions.Test.Mapper
 {
-    [TestFixture]
+    [TestClass]
     public class AutoClassMapperFixture
     {
-        [TestFixture]
+        [TestClass]
         public class AutoClassMapperTableName
         {
-            [Test]
+            [TestMethod]
             public void Constructor_ReturnsProperName()
             {
                 AutoClassMapper<Foo> m = GetMapper<Foo>();
                 Assert.AreEqual("Foo", m.TableName);
             }
 
-            [Test]
+            [TestMethod]
             public void SettingTableName_ReturnsProperName()
             {
                 AutoClassMapper<Foo> m = GetMapper<Foo>();
@@ -28,7 +28,7 @@ namespace DapperExtensions.Test.Mapper
                 Assert.AreEqual("Barz", m.TableName);
             }
 
-            [Test]
+            [TestMethod]
             public void Sets_IdPropertyToKeyWhenFirstProperty()
             {
                 AutoClassMapper<IdIsFirst> m = GetMapper<IdIsFirst>();
@@ -36,7 +36,7 @@ namespace DapperExtensions.Test.Mapper
                 Assert.IsTrue(map.ColumnName == "Id");
             }
 
-            [Test]
+            [TestMethod]
             public void Sets_IdPropertyToKeyWhenFoundInClass()
             {
                 AutoClassMapper<IdIsSecond> m = GetMapper<IdIsSecond>();
@@ -44,7 +44,7 @@ namespace DapperExtensions.Test.Mapper
                 Assert.IsTrue(map.ColumnName == "Id");
             }
 
-            [Test]
+            [TestMethod]
             public void Sets_IdFirstPropertyEndingInIdWhenNoIdPropertyFound()
             {
                 AutoClassMapper<IdDoesNotExist> m = GetMapper<IdDoesNotExist>();
@@ -58,17 +58,17 @@ namespace DapperExtensions.Test.Mapper
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class CustomAutoMapperTableName
         {
-            [Test]
+            [TestMethod]
             public void ReturnsProperPluralization()
             {
                 CustomAutoMapper<Foo> m = GetMapper<Foo>();
                 Assert.AreEqual("Foo", m.TableName);
             }
 
-            [Test]
+            [TestMethod]
             public void ReturnsProperResultsForExceptions()
             {
                 CustomAutoMapper<Foo2> m = GetMapper<Foo2>();

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using DapperExtensions.Mapper;
 using DapperExtensions.Sql;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NUnit.Framework;
 
 namespace DapperExtensions.Test.Sql
 {
-    [TestFixture]
+    [TestClass]
     public class SqlGeneratorFixture
     {
         public abstract class SqlGeneratorFixtureBase
@@ -19,7 +19,7 @@ namespace DapperExtensions.Test.Sql
             protected Mock<ISqlDialect> Dialect;
             protected Mock<IClassMapper> ClassMap;
 
-            [SetUp]
+            [TestInitialize]
             public void Setup()
             {
                 Configuration = new Mock<IDapperExtensionsConfiguration>();
@@ -34,20 +34,20 @@ namespace DapperExtensions.Test.Sql
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class SelectMethod : SqlGeneratorFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void WithNullParameters_ThrowsException()
             {
                 Sort sort = new Sort();
-                var ex = Assert.Throws<ArgumentNullException>(
+                var ex = Assert.ThrowsException<ArgumentNullException>(
                     () => Generator.Object.Select(ClassMap.Object, null, null, null));
                 StringAssert.Contains("cannot be null", ex.Message);
                 Assert.AreEqual("Parameters", ex.ParamName);
             }
 
-            [Test]
+            [TestMethod]
             public void WithoutPredicateAndSort_GeneratesSql()
             {
                 IDictionary<string, object> parameters = new Dictionary<string, object>();
@@ -61,7 +61,7 @@ namespace DapperExtensions.Test.Sql
                 Generator.Verify();
             }
 
-            [Test]
+            [TestMethod]
             public void WithPredicate_GeneratesSql()
             {
                 IDictionary<string, object> parameters = new Dictionary<string, object>();
@@ -79,7 +79,7 @@ namespace DapperExtensions.Test.Sql
                 predicate.Verify();
             }
 
-            [Test]
+            [TestMethod]
             public void WithSort_GeneratesSql()
             {
                 IDictionary<string, object> parameters = new Dictionary<string, object>();
@@ -102,7 +102,7 @@ namespace DapperExtensions.Test.Sql
                 Generator.Verify();
             }
 
-            [Test]
+            [TestMethod]
             public void WithPredicateAndSort_GeneratesSql()
             {
                 IDictionary<string, object> parameters = new Dictionary<string, object>();
@@ -130,37 +130,37 @@ namespace DapperExtensions.Test.Sql
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class SelectPagedMethod : SqlGeneratorFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void WithNoSort_ThrowsException()
             {
-                var ex = Assert.Throws<ArgumentNullException>(
+                var ex = Assert.ThrowsException<ArgumentNullException>(
                     () => Generator.Object.SelectPaged(ClassMap.Object, null, null, 0, 1, new Dictionary<string, object>()));
                 StringAssert.Contains("null or empty", ex.Message);
             }
 
-            [Test]
+            [TestMethod]
             public void WithEmptySort_ThrowsException()
             {
-                var ex = Assert.Throws<ArgumentNullException>(
+                var ex = Assert.ThrowsException<ArgumentNullException>(
                     () => Generator.Object.SelectPaged(ClassMap.Object, null, new List<ISort>(), 0, 1, new Dictionary<string, object>()));
                 StringAssert.Contains("null or empty", ex.Message);
                 Assert.AreEqual("Sort", ex.ParamName);
             }
 
-            [Test]
+            [TestMethod]
             public void WithNullParameters_ThrowsException()
             {
                 Sort sort = new Sort();
-                var ex = Assert.Throws<ArgumentNullException>(
+                var ex = Assert.ThrowsException<ArgumentNullException>(
                     () => Generator.Object.SelectPaged(ClassMap.Object, null, new List<ISort> { sort }, 0, 1, null));
                 StringAssert.Contains("cannot be null", ex.Message);
                 Assert.AreEqual("Parameters", ex.ParamName);
             }
 
-            [Test]
+            [TestMethod]
             public void WithSort_GeneratesSql()
             {
                 IDictionary<string, object> parameters = new Dictionary<string, object>();
@@ -186,7 +186,7 @@ namespace DapperExtensions.Test.Sql
                 Dialect.Verify();
             }
 
-            [Test]
+            [TestMethod]
             public void WithPredicateAndSort_GeneratesSql()
             {
                 IDictionary<string, object> parameters = new Dictionary<string, object>();
@@ -216,37 +216,37 @@ namespace DapperExtensions.Test.Sql
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class SelectSetMethod : SqlGeneratorFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void WithNoSort_ThrowsException()
             {
-                var ex = Assert.Throws<ArgumentNullException>(
+                var ex = Assert.ThrowsException<ArgumentNullException>(
                     () => Generator.Object.SelectSet(ClassMap.Object, null, null, 0, 1, new Dictionary<string, object>()));
                 StringAssert.Contains("null or empty", ex.Message);
             }
 
-            [Test]
+            [TestMethod]
             public void WithEmptySort_ThrowsException()
             {
-                var ex = Assert.Throws<ArgumentNullException>(
+                var ex = Assert.ThrowsException<ArgumentNullException>(
                     () => Generator.Object.SelectSet(ClassMap.Object, null, new List<ISort>(), 0, 1, new Dictionary<string, object>()));
                 StringAssert.Contains("null or empty", ex.Message);
                 Assert.AreEqual("Sort", ex.ParamName);
             }
 
-            [Test]
+            [TestMethod]
             public void WithNullParameters_ThrowsException()
             {
                 Sort sort = new Sort();
-                var ex = Assert.Throws<ArgumentNullException>(
+                var ex = Assert.ThrowsException<ArgumentNullException>(
                     () => Generator.Object.SelectSet(ClassMap.Object, null, new List<ISort> { sort }, 0, 1, null));
                 StringAssert.Contains("cannot be null", ex.Message);
                 Assert.AreEqual("Parameters", ex.ParamName);
             }
 
-            [Test]
+            [TestMethod]
             public void WithSort_GeneratesSql()
             {
                 IDictionary<string, object> parameters = new Dictionary<string, object>();
@@ -272,7 +272,7 @@ namespace DapperExtensions.Test.Sql
                 Dialect.Verify();
             }
 
-            [Test]
+            [TestMethod]
             public void WithPredicateAndSort_GeneratesSql()
             {
                 IDictionary<string, object> parameters = new Dictionary<string, object>();
@@ -302,18 +302,18 @@ namespace DapperExtensions.Test.Sql
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class CountMethod : SqlGeneratorFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void WithNullParameters_ThrowsException()
             {
-                var ex = Assert.Throws<ArgumentNullException>(() => Generator.Object.Count(ClassMap.Object, null, null));
+                var ex = Assert.ThrowsException<ArgumentNullException>(() => Generator.Object.Count(ClassMap.Object, null, null));
                 StringAssert.Contains("cannot be null", ex.Message);
                 Assert.AreEqual("Parameters", ex.ParamName);
             }
 
-            [Test]
+            [TestMethod]
             public void WithoutPredicate_ThrowsException()
             {
                 Generator.Setup(g => g.GetTableName(ClassMap.Object)).Returns("TableName").Verifiable();
@@ -326,7 +326,7 @@ namespace DapperExtensions.Test.Sql
                 Dialect.Verify();
             }
 
-            [Test]
+            [TestMethod]
             public void WithPredicate_ThrowsException()
             {
                 var parameters = new Dictionary<string, object>();
@@ -345,10 +345,10 @@ namespace DapperExtensions.Test.Sql
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class InsertMethod : SqlGeneratorFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void WithNoMappedColumns_Throws_Exception()
             {
                 Mock<IPropertyMap> property1 = new Mock<IPropertyMap>();
@@ -366,7 +366,7 @@ namespace DapperExtensions.Test.Sql
 
                 ClassMap.SetupGet(c => c.Properties).Returns(properties).Verifiable();
 
-                var ex = Assert.Throws<ArgumentException>(() => Generator.Object.Insert(ClassMap.Object));
+                var ex = Assert.ThrowsException<ArgumentException>(() => Generator.Object.Insert(ClassMap.Object));
 
                 StringAssert.Contains("columns were mapped", ex.Message);
                 ClassMap.Verify();
@@ -374,7 +374,7 @@ namespace DapperExtensions.Test.Sql
                 property2.Verify();
             }
 
-            [Test]
+            [TestMethod]
             public void DoesNotGenerateIdentityColumns()
             {
                 Mock<IPropertyMap> property1 = new Mock<IPropertyMap>();
@@ -409,7 +409,7 @@ namespace DapperExtensions.Test.Sql
                 Generator.Verify(g => g.GetColumnName(ClassMap.Object, property1.Object, false), Times.Never());
             }
 
-            [Test]
+            [TestMethod]
             public void DoesNotGenerateIgnoredColumns()
             {
                 Mock<IPropertyMap> property1 = new Mock<IPropertyMap>();
@@ -444,7 +444,7 @@ namespace DapperExtensions.Test.Sql
                 Generator.Verify(g => g.GetColumnName(ClassMap.Object, property1.Object, false), Times.Never());
             }
 
-            [Test]
+            [TestMethod]
             public void DoesNotGenerateReadonlyColumns()
             {
                 Mock<IPropertyMap> property1 = new Mock<IPropertyMap>();
@@ -480,27 +480,27 @@ namespace DapperExtensions.Test.Sql
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class UpdateMethod : SqlGeneratorFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void WithNullPredicate_ThrowsException()
             {
-                var ex = Assert.Throws<ArgumentNullException>(() => Generator.Object.Update(ClassMap.Object, null, new Dictionary<string, object>(), false));
+                var ex = Assert.ThrowsException<ArgumentNullException>(() => Generator.Object.Update(ClassMap.Object, null, new Dictionary<string, object>(), false));
                 StringAssert.Contains("cannot be null", ex.Message);
                 Assert.AreEqual("Predicate", ex.ParamName);
             }
 
-            [Test]
+            [TestMethod]
             public void WithNullParameters_ThrowsException()
             {
                 Mock<IPredicate> predicate = new Mock<IPredicate>();
-                var ex = Assert.Throws<ArgumentNullException>(() => Generator.Object.Update(ClassMap.Object, predicate.Object, null, false));
+                var ex = Assert.ThrowsException<ArgumentNullException>(() => Generator.Object.Update(ClassMap.Object, predicate.Object, null, false));
                 StringAssert.Contains("cannot be null", ex.Message);
                 Assert.AreEqual("Parameters", ex.ParamName);
             }
 
-            [Test]
+            [TestMethod]
             public void WithNoMappedColumns_Throws_Exception()
             {
                 Mock<IPropertyMap> property1 = new Mock<IPropertyMap>();
@@ -520,7 +520,7 @@ namespace DapperExtensions.Test.Sql
                 Mock<IPredicate> predicate = new Mock<IPredicate>();
                 Dictionary<string, object> parameters = new Dictionary<string, object>();
 
-                var ex = Assert.Throws<ArgumentException>(() => Generator.Object.Update(ClassMap.Object, predicate.Object, parameters, false));
+                var ex = Assert.ThrowsException<ArgumentException>(() => Generator.Object.Update(ClassMap.Object, predicate.Object, parameters, false));
 
                 StringAssert.Contains("columns were mapped", ex.Message);
                 ClassMap.Verify();
@@ -528,7 +528,7 @@ namespace DapperExtensions.Test.Sql
                 property2.Verify();
             }
             
-            [Test]
+            [TestMethod]
             public void DoesNotGenerateIdentityColumns()
             {
                 Mock<IPropertyMap> property1 = new Mock<IPropertyMap>();
@@ -569,7 +569,7 @@ namespace DapperExtensions.Test.Sql
                 Generator.Verify(g => g.GetColumnName(ClassMap.Object, property1.Object, false), Times.Never());
             }
 
-            [Test]
+            [TestMethod]
             public void DoesNotGenerateIgnoredColumns()
             {
                 Mock<IPropertyMap> property1 = new Mock<IPropertyMap>();
@@ -610,7 +610,7 @@ namespace DapperExtensions.Test.Sql
                 Generator.Verify(g => g.GetColumnName(ClassMap.Object, property1.Object, false), Times.Never());
             }
 
-            [Test]
+            [TestMethod]
             public void DoesNotGenerateReadonlyColumns()
             {
                 Mock<IPropertyMap> property1 = new Mock<IPropertyMap>();
@@ -652,27 +652,27 @@ namespace DapperExtensions.Test.Sql
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class DeleteWithPredicateMethod : SqlGeneratorFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void WithNullPredicate_ThrowsException()
             {
-                var ex = Assert.Throws<ArgumentNullException>(() => Generator.Object.Delete(ClassMap.Object, null, new Dictionary<string, object>()));
+                var ex = Assert.ThrowsException<ArgumentNullException>(() => Generator.Object.Delete(ClassMap.Object, null, new Dictionary<string, object>()));
                 StringAssert.Contains("cannot be null", ex.Message);
                 Assert.AreEqual("Predicate", ex.ParamName);
             }
 
-            [Test]
+            [TestMethod]
             public void WithNullParameters_ThrowsException()
             {
                 Mock<IPredicate> predicate = new Mock<IPredicate>();
-                var ex = Assert.Throws<ArgumentNullException>(() => Generator.Object.Delete(ClassMap.Object, predicate.Object, null));
+                var ex = Assert.ThrowsException<ArgumentNullException>(() => Generator.Object.Delete(ClassMap.Object, predicate.Object, null));
                 StringAssert.Contains("cannot be null", ex.Message);
                 Assert.AreEqual("Parameters", ex.ParamName);
             }
 
-            [Test]
+            [TestMethod]
             public void GeneratesSql()
             {
                 IDictionary<string, object> parameters = new Dictionary<string, object>();
@@ -689,10 +689,10 @@ namespace DapperExtensions.Test.Sql
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class IdentitySqlMethod : SqlGeneratorFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void CallsDialect()
             {
                 Dialect.Setup(d => d.GetIdentitySql("TableName")).Returns("IdentitySql").Verifiable();
@@ -704,10 +704,10 @@ namespace DapperExtensions.Test.Sql
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class GetTableNameMethod : SqlGeneratorFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void CallsDialect()
             {
                 ClassMap.SetupGet(c => c.SchemaName).Returns("SchemaName").Verifiable();
@@ -720,10 +720,10 @@ namespace DapperExtensions.Test.Sql
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class GetColumnNameMethod : SqlGeneratorFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void DoesNotIncludeAliasWhenParameterIsFalse()
             {
                 Mock<IPropertyMap> property = new Mock<IPropertyMap>();
@@ -738,7 +738,7 @@ namespace DapperExtensions.Test.Sql
                 Generator.Verify();
             }
 
-            [Test]
+            [TestMethod]
             public void DoesNotIncludeAliasWhenColumnAndNameAreSame()
             {
                 Mock<IPropertyMap> property = new Mock<IPropertyMap>();
@@ -753,7 +753,7 @@ namespace DapperExtensions.Test.Sql
                 Generator.Verify();
             }
 
-            [Test]
+            [TestMethod]
             public void IncludesAliasWhenColumnAndNameAreDifferent()
             {
                 Mock<IPropertyMap> property = new Mock<IPropertyMap>();
@@ -769,19 +769,19 @@ namespace DapperExtensions.Test.Sql
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class GetColumnNameUsingStirngMethod : SqlGeneratorFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void ThrowsExceptionWhenDoesNotFindProperty()
             {
                 ClassMap.SetupGet(c => c.Properties).Returns(new List<IPropertyMap>()).Verifiable();
-                var ex = Assert.Throws<ArgumentException>(() => Generator.Object.GetColumnName(ClassMap.Object, "property", true));
+                var ex = Assert.ThrowsException<ArgumentException>(() => Generator.Object.GetColumnName(ClassMap.Object, "property", true));
                 StringAssert.Contains("Could not find 'property'", ex.Message);
                 ClassMap.Verify();
             }
 
-            [Test]
+            [TestMethod]
             public void CallsGetColumnNameWithProperty()
             {
                 Mock<IPropertyMap> property = new Mock<IPropertyMap>();
@@ -796,10 +796,10 @@ namespace DapperExtensions.Test.Sql
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class SupportsMultipleStatementsMethod : SqlGeneratorFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void CallsDialect()
             {
                 Dialect.SetupGet(d => d.SupportsMultipleStatements).Returns(true).Verifiable();
@@ -809,10 +809,10 @@ namespace DapperExtensions.Test.Sql
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class BuildSelectColumnsMethod : SqlGeneratorFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void GeneratesSql()
             {
                 Mock<IPropertyMap> property1 = new Mock<IPropertyMap>();
@@ -833,7 +833,7 @@ namespace DapperExtensions.Test.Sql
                 Generator.Verify();
             }
 
-            [Test]
+            [TestMethod]
             public void DoesNotIncludeIgnoredColumns()
             {
                 Mock<IPropertyMap> property1 = new Mock<IPropertyMap>();

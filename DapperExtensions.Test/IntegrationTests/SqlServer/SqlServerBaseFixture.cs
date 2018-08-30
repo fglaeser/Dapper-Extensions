@@ -8,7 +8,7 @@ using System.Text;
 using Dapper;
 using DapperExtensions.Mapper;
 using DapperExtensions.Sql;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DapperExtensions.Test.IntegrationTests.SqlServer
 {
@@ -16,7 +16,7 @@ namespace DapperExtensions.Test.IntegrationTests.SqlServer
     {
         protected IDatabase Db;
 
-        [SetUp]
+        [TestInitialize]
         public virtual void Setup()
         {
             var connection = new SqlConnection("Data Source=.;Initial Catalog=dapperTest;Integrated security=True;");

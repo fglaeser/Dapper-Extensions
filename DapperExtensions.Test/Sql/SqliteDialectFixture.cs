@@ -3,28 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using DapperExtensions.Sql;
 using DapperExtensions.Test.Helpers;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DapperExtensions.Test.Sql
 {
-    [TestFixture]
+    [TestClass]
     public class SqliteDialectFixture
     {
         public abstract class SqliteDialectFixtureBase
         {
             protected SqliteDialect Dialect;
 
-            [SetUp]
+            [TestInitialize]
             public void Setup()
             {
                 Dialect = new SqliteDialect();
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class Properties : SqliteDialectFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void CheckSettings()
             {
                 Assert.AreEqual('"', Dialect.OpenQuote);
@@ -35,34 +35,34 @@ namespace DapperExtensions.Test.Sql
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class GetPagingSqlMethod : SqliteDialectFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void NullSql_ThrowsException()
             {
-                var ex = Assert.Throws<ArgumentNullException>(() => Dialect.GetPagingSql(null, 0, 10, new Dictionary<string, object>()));
+                var ex = Assert.ThrowsException<ArgumentNullException>(() => Dialect.GetPagingSql(null, 0, 10, new Dictionary<string, object>()));
                 Assert.AreEqual("SQL", ex.ParamName);
                 StringAssert.Contains("cannot be null", ex.Message);
             }
 
-            [Test]
+            [TestMethod]
             public void EmptySql_ThrowsException()
             {
-                var ex = Assert.Throws<ArgumentNullException>(() => Dialect.GetPagingSql(string.Empty, 0, 10, new Dictionary<string, object>()));
+                var ex = Assert.ThrowsException<ArgumentNullException>(() => Dialect.GetPagingSql(string.Empty, 0, 10, new Dictionary<string, object>()));
                 Assert.AreEqual("SQL", ex.ParamName);
                 StringAssert.Contains("cannot be null", ex.Message);
             }
 
-            [Test]
+            [TestMethod]
             public void NullParameters_ThrowsException()
             {
-                var ex = Assert.Throws<ArgumentNullException>(() => Dialect.GetPagingSql("SELECT [schema].[column] FROM [schema].[table]", 0, 10, null));
+                var ex = Assert.ThrowsException<ArgumentNullException>(() => Dialect.GetPagingSql("SELECT [schema].[column] FROM [schema].[table]", 0, 10, null));
                 Assert.AreEqual("Parameters", ex.ParamName);
                 StringAssert.Contains("cannot be null", ex.Message);
             }
 
-            [Test]
+            [TestMethod]
             public void Select_ReturnsSql()
             {
                 var parameters = new Dictionary<string, object>();

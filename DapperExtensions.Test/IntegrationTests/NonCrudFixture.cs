@@ -7,17 +7,17 @@ using DapperExtensions.Mapper;
 using DapperExtensions.Test.Data;
 using DapperExtensions.Test.Entities;
 using DapperExtensions.Test.Maps;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DapperExtensions.Test.IntegrationTests
 {
-    [TestFixture]
+    [TestClass]
     public class NonCrudFixture
     {
-        [TestFixture]
+        [TestClass]
         public class GetNextGuidMethod
         {
-            [Test]
+            [TestMethod]
             public void GetMultiple_DoesNotDuplicate()
             {
                 List<Guid> list = new List<Guid>();
@@ -30,31 +30,31 @@ namespace DapperExtensions.Test.IntegrationTests
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class GetMapMethod
         {
-            [Test]
+            [TestMethod]
             public void NoMappingClass_ReturnsDefaultMapper()
             {
                 var mapper = DapperExtensions.GetMap<EntityWithoutMapper>();
                 Assert.AreEqual(typeof(AutoClassMapper<EntityWithoutMapper>), mapper.GetType());
             }
 
-            [Test]
+            [TestMethod]
             public void ClassMapperDescendant_Returns_DefinedClass()
             {
                 var mapper = DapperExtensions.GetMap<EntityWithMapper>();
                 Assert.AreEqual(typeof(EntityWithMapperMapper), mapper.GetType());
             }
 
-            [Test]
+            [TestMethod]
             public void ClassMapperInterface_Returns_DefinedMapper()
             {
                 var mapper = DapperExtensions.GetMap<EntityWithInterfaceMapper>();
                 Assert.AreEqual(typeof(EntityWithInterfaceMapperMapper), mapper.GetType());
             }
 
-            [Test]
+            [TestMethod]
             public void MappingClass_ReturnsFromDifferentAssembly()
             {
                 DapperExtensions.SetMappingAssemblies(new[] { typeof(ExternallyMappedMap).Assembly });

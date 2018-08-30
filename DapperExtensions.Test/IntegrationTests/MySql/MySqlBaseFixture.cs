@@ -7,8 +7,8 @@ using System.Text;
 using Dapper;
 using DapperExtensions.Mapper;
 using DapperExtensions.Sql;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MySql.Data.MySqlClient;
-using NUnit.Framework;
 
 namespace DapperExtensions.Test.IntegrationTests.MySql
 {
@@ -16,7 +16,7 @@ namespace DapperExtensions.Test.IntegrationTests.MySql
     {
         protected IDatabase Db;
 
-        [SetUp]
+        [TestInitialize]
         public virtual void Setup()
         {
             var connection = new MySqlConnection("Server=localhost;Port=3306;Database=dapperTest;uid=root;password=password!");

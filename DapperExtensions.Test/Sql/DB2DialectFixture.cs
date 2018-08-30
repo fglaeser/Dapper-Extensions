@@ -3,28 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using DapperExtensions.Sql;
 using DapperExtensions.Test.Helpers;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DapperExtensions.Test.Sql
 {
-    [TestFixture]
+    [TestClass]
     public class DB2DialectFixture
     {
         public abstract class DB2DialectFixtureBase
         {
             protected DB2Dialect Dialect;
 
-            [SetUp]
+            [TestInitialize]
             public void Setup()
             {
                 Dialect = new DB2Dialect();
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class Properties : DB2DialectFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void CheckSettings()
             {
                 Assert.AreEqual('"', Dialect.OpenQuote);
@@ -35,34 +35,34 @@ namespace DapperExtensions.Test.Sql
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class GetPagingSqlMethod : DB2DialectFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void NullSql_ThrowsException()
             {
-                var ex = Assert.Throws<ArgumentNullException>(() => Dialect.GetPagingSql(null, 0, 10, new Dictionary<string, object>()));
+                var ex = Assert.ThrowsException<ArgumentNullException>(() => Dialect.GetPagingSql(null, 0, 10, new Dictionary<string, object>()));
                 Assert.AreEqual("SQL", ex.ParamName);
                 StringAssert.Contains("cannot be null", ex.Message);
             }
 
-            [Test]
+            [TestMethod]
             public void EmptySql_ThrowsException()
             {
-                var ex = Assert.Throws<ArgumentNullException>(() => Dialect.GetPagingSql(string.Empty, 0, 10, new Dictionary<string, object>()));
+                var ex = Assert.ThrowsException<ArgumentNullException>(() => Dialect.GetPagingSql(string.Empty, 0, 10, new Dictionary<string, object>()));
                 Assert.AreEqual("SQL", ex.ParamName);
                 StringAssert.Contains("cannot be null", ex.Message);
             }
 
-            [Test]
+            [TestMethod]
             public void NullParameters_ThrowsException()
             {
-                var ex = Assert.Throws<ArgumentNullException>(() => Dialect.GetPagingSql("SELECT \"SCHEMA\".\"COLUMN\" FROM \"SCHEMA\".\"TABLE\"", 0, 10, null));
+                var ex = Assert.ThrowsException<ArgumentNullException>(() => Dialect.GetPagingSql("SELECT \"SCHEMA\".\"COLUMN\" FROM \"SCHEMA\".\"TABLE\"", 0, 10, null));
                 Assert.AreEqual("Parameters", ex.ParamName);
                 StringAssert.Contains("cannot be null", ex.Message);
             }
 
-            [Test]
+            [TestMethod]
             public void Select_ReturnsSql()
             {
                 var parameters = new Dictionary<string, object>();
@@ -74,7 +74,7 @@ namespace DapperExtensions.Test.Sql
                 Assert.AreEqual(parameters["@_pageEndRow"], 10);
             }
 
-            [Test]
+            [TestMethod]
             public void SelectDistinct_ReturnsSql()
             {
                 var parameters = new Dictionary<string, object>();
@@ -86,7 +86,7 @@ namespace DapperExtensions.Test.Sql
                 Assert.AreEqual(parameters["@_pageEndRow"], 10);
             }
 
-            [Test]
+            [TestMethod]
             public void SelectOrderBy_ReturnsSql()
             {
                 var parameters = new Dictionary<string, object>();
@@ -99,24 +99,24 @@ namespace DapperExtensions.Test.Sql
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class GetOrderByClauseMethod : DB2DialectFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void NoOrderBy_Returns()
             {
                 var result = Dialect.TestProtected().RunMethod<string>("GetOrderByClause", "SELECT * FROM Table");
                 Assert.IsNull(result);
             }
 
-            [Test]
+            [TestMethod]
             public void OrderBy_ReturnsItemsAfterClause()
             {
                 var result = Dialect.TestProtected().RunMethod<string>("GetOrderByClause", "SELECT * FROM Table ORDER BY Column1 ASC, Column2 DESC");
                 Assert.AreEqual("ORDER BY Column1 ASC, Column2 DESC", result);
             }
 
-            [Test]
+            [TestMethod]
             public void OrderByWithWhere_ReturnsOnlyOrderBy()
             {
                 var result = Dialect.TestProtected().RunMethod<string>("GetOrderByClause", "SELECT * FROM Table ORDER BY Column1 ASC, Column2 DESC WHERE Column1 = 'value'");

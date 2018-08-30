@@ -4,16 +4,16 @@ using System.Linq;
 using DapperExtensions.Sql;
 using DapperExtensions.Test.Data;
 using DapperExtensions.Test.Helpers;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DapperExtensions.Test.IntegrationTests
 {
-    [TestFixture]
+    [TestClass]
     public class DatabaseTestsFixture
     {/*
         public class PredicateTests : DatabaseConnection
         {
-            [Test]
+            [TestMethod]
             public void Eq_EnumerableType_GeneratesAndRunsProperSql()
             {
                 Person p1 = new Person { Active = true, FirstName = "Alpha", LastName = "Bar", DateCreated = DateTime.UtcNow };
@@ -28,7 +28,7 @@ namespace DapperExtensions.Test.IntegrationTests
                 Assert.IsTrue(result.Any(r => r.FirstName == "Gamma"));
             }
 
-            [Test]
+            [TestMethod]
             public void Exists_GeneratesAndRunsProperSql()
             {
                 Person p1 = new Person { Active = true, FirstName = "Alpha", LastName = "Bar", DateCreated = DateTime.UtcNow };
@@ -49,7 +49,7 @@ namespace DapperExtensions.Test.IntegrationTests
                 Assert.IsTrue(result.Any(r => r.FirstName == "Gamma"));
             }
 
-            [Test]
+            [TestMethod]
             public void Between_GeneratesAndRunsProperSql()
             {
                 Person p1 = new Person { Active = true, FirstName = "Alpha", LastName = "Bar", DateCreated = DateTime.UtcNow };
@@ -68,7 +68,7 @@ namespace DapperExtensions.Test.IntegrationTests
 
         public class CustomMapperTests : DatabaseConnection
         {
-            [Test]
+            [TestMethod]
             public void GeneratesAndRunsProperSql()
             {
                 Impl = new DapperExtensions.DapperExtensionsImpl(typeof(CustomMapper), TestHelpers.GetGenerator());

@@ -4,7 +4,7 @@ using System.Reflection;
 using Dapper;
 using DapperExtensions.Mapper;
 using DapperExtensions.Sql;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Oracle.ManagedDataAccess.Client;
 
 namespace DapperExtensions.Test.IntegrationTests.Oracle
@@ -13,7 +13,7 @@ namespace DapperExtensions.Test.IntegrationTests.Oracle
     {
         protected IDatabase Db;
 
-        [SetUp]
+        [TestInitialize]
         public virtual void Setup()
         {
             var connection = new OracleConnection("Data Source=localhost/xe; User Id=xe; Password=xe;");

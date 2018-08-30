@@ -6,17 +6,17 @@ using System.Numerics;
 using System.Reflection;
 using DapperExtensions.Mapper;
 using DapperExtensions.Test.Helpers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NUnit.Framework;
 
 namespace DapperExtensions.Test.Mapper
 {
-    [TestFixture]
-    public class ClassMapperFixture
+  [TestClass]
+  public class ClassMapperFixture
     {
         public abstract class ClassMapperFixtureBase
         {
-            [SetUp]
+            [TestInitialize]
             public void Setup()
             {
             }
@@ -27,8 +27,8 @@ namespace DapperExtensions.Test.Mapper
             }
         }
 
-        [TestFixture]
-        public class UnMapTests : ClassMapperFixtureBase
+    [TestClass]
+    public class UnMapTests : ClassMapperFixtureBase
         {
             public class Foo
             {
@@ -59,7 +59,7 @@ namespace DapperExtensions.Test.Mapper
                 return mapper.Properties.Where(w => w.Name == "Name").Count() == 1;
             }
 
-            [Test]
+            [TestMethod]
             public void UnMapRemovesAnExistingMapping()
             {
                 var target = new FooClassMapper();
@@ -71,7 +71,7 @@ namespace DapperExtensions.Test.Mapper
                 Assert.IsFalse(mappingExists(target));
             }
 
-            [Test]
+            [TestMethod]
             [ExpectedException(typeof(ApplicationException))]
             public void UnMapThrowExceptionWhenMappingDidntPreviouslyExist()
             {
@@ -81,10 +81,10 @@ namespace DapperExtensions.Test.Mapper
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class AutoMapIdTests : ClassMapperFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void AutoMapSetsFirstIdToIdentityWhenByte()
             {
                 var mapper = GetMapper<Test1<byte>>();
@@ -96,7 +96,7 @@ namespace DapperExtensions.Test.Mapper
                 Assert.AreEqual(KeyType.Identity, mapper2.Properties[0].KeyType);
             }
 
-            [Test]
+            [TestMethod]
             public void AutoMapSetsFirstIdToIdentityWhenSByte()
             {
                 var mapper = GetMapper<Test1<sbyte>>();
@@ -108,7 +108,7 @@ namespace DapperExtensions.Test.Mapper
                 Assert.AreEqual(KeyType.Identity, mapper2.Properties[0].KeyType);
             }
 
-            [Test]
+            [TestMethod]
             public void AutoMapSetsFirstIdToIdentityWhenInt16()
             {
                 var mapper = GetMapper<Test1<short>>();
@@ -120,7 +120,7 @@ namespace DapperExtensions.Test.Mapper
                 Assert.AreEqual(KeyType.Identity, mapper2.Properties[0].KeyType);
             }
 
-            [Test]
+            [TestMethod]
             public void AutoMapSetsFirstIdToIdentityWhenUnsignedInt16()
             {
                 var mapper = GetMapper<Test1<ushort>>();
@@ -132,7 +132,7 @@ namespace DapperExtensions.Test.Mapper
                 Assert.AreEqual(KeyType.Identity, mapper2.Properties[0].KeyType);
             }
 
-            [Test]
+            [TestMethod]
             public void AutoMapSetsFirstIdToIdentityWhenInt32()
             {
                 var mapper = GetMapper<Test1<int>>();
@@ -144,7 +144,7 @@ namespace DapperExtensions.Test.Mapper
                 Assert.AreEqual(KeyType.Identity, mapper2.Properties[0].KeyType);
             }
 
-            [Test]
+            [TestMethod]
             public void AutoMapSetsFirstIdToIdentityWhenUnsignedInt32()
             {
                 var mapper = GetMapper<Test1<uint>>();
@@ -156,7 +156,7 @@ namespace DapperExtensions.Test.Mapper
                 Assert.AreEqual(KeyType.Identity, mapper2.Properties[0].KeyType);
             }
 
-            [Test]
+            [TestMethod]
             public void AutoMapSetsFirstIdToIdentityWhenInt64()
             {
                 var mapper = GetMapper<Test1<long>>();
@@ -168,7 +168,7 @@ namespace DapperExtensions.Test.Mapper
                 Assert.AreEqual(KeyType.Identity, mapper2.Properties[0].KeyType);
             }
 
-            [Test]
+            [TestMethod]
             public void AutoMapSetsFirstIdToIdentityWhenUnsignedInt64()
             {
                 var mapper = GetMapper<Test1<ulong>>();
@@ -180,7 +180,7 @@ namespace DapperExtensions.Test.Mapper
                 Assert.AreEqual(KeyType.Identity, mapper2.Properties[0].KeyType);
             }
 
-            [Test]
+            [TestMethod]
             public void AutoMapSetsFirstIdToIdentityWhenBigInteger()
             {
                 var mapper = GetMapper<Test1<BigInteger>>();
@@ -192,7 +192,7 @@ namespace DapperExtensions.Test.Mapper
                 Assert.AreEqual(KeyType.Identity, mapper2.Properties[0].KeyType);
             }
 
-            [Test]
+            [TestMethod]
             public void AutoMapSetsFirstIdToGuidWhenGuid()
             {
                 var mapper = GetMapper<Test1<Guid>>();
@@ -204,7 +204,7 @@ namespace DapperExtensions.Test.Mapper
                 Assert.AreEqual(KeyType.Guid, mapper2.Properties[0].KeyType);
             }
 
-            [Test]
+            [TestMethod]
             public void AutoMapSetsFirstIdToAssignedWhenNotKeyType()
             {
                 var mapper = GetMapper<Test1<string>>();
@@ -226,10 +226,10 @@ namespace DapperExtensions.Test.Mapper
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class AutoMapMethod : ClassMapperFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void MapsAllProperties()
             {
                 var mapper = GetMapper<FooWithIntId>();
@@ -243,7 +243,7 @@ namespace DapperExtensions.Test.Mapper
                 Assert.AreEqual(mapper.Properties[2].Name, "BarId");
             }
 
-            [Test]
+            [TestMethod]
             public void MakesFirstIntId_AIdentityKey()
             {
                 var mapper = GetMapper<FooWithIntId>();
@@ -252,7 +252,7 @@ namespace DapperExtensions.Test.Mapper
                 Assert.AreEqual(mapper.Properties[2].KeyType, KeyType.NotAKey);
             }
 
-            [Test]
+            [TestMethod]
             public void MakesFirstGuidId_AGuidKey()
             {
                 var mapper = GetMapper<FooWithGuidId>();
@@ -261,7 +261,7 @@ namespace DapperExtensions.Test.Mapper
                 Assert.AreEqual(mapper.Properties[2].KeyType, KeyType.NotAKey);
             }
 
-            [Test]
+            [TestMethod]
             public void MakesFirstStringId_AAssignedKey()
             {
                 var mapper = GetMapper<FooWithStringId>();
@@ -270,7 +270,7 @@ namespace DapperExtensions.Test.Mapper
                 Assert.AreEqual(mapper.Properties[2].KeyType, KeyType.NotAKey);
             }
 
-            [Test]
+            [TestMethod]
             public void DoesNotMapAlreadyMappedProperties()
             {
                 Mock<IPropertyMap> property = new Mock<IPropertyMap>();
@@ -286,7 +286,7 @@ namespace DapperExtensions.Test.Mapper
                 Assert.AreEqual(mapper.Properties[2].KeyType, KeyType.NotAKey);
             }
 
-            [Test]
+            [TestMethod]
             public void EnumerableDoesNotThrowException()
             {
                 var mapper = GetMapper<Foo>();
@@ -294,7 +294,7 @@ namespace DapperExtensions.Test.Mapper
                 Assert.AreEqual(2, mapper.Properties.Count);
             }
 
-            [Test]
+            [TestMethod]
             public void IgnoringAnEnumerableDoesNotCauseError()
             {
                 var mapper = new TestMapper<Foo>();
@@ -303,7 +303,7 @@ namespace DapperExtensions.Test.Mapper
                 Assert.AreEqual(2, mapper.Properties.Count);
             }
 
-            [Test]
+            [TestMethod]
             public void DoesNotMapPropertyWhenCanMapIsFalse()
             {
                 var mapper = new TestMapper<Foo>();

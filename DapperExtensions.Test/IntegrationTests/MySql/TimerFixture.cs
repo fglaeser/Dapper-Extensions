@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using DapperExtensions.Test.Data;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DapperExtensions.Test.IntegrationTests.MySql
 {
-    [TestFixture]
+    [TestClass]
     public class TimerFixture
     {
         private static int cnt = 1000;
 
         public class InsertTimes : MySqlBaseFixture
         {
-            [Test]
+            [TestMethod]
             public void IdentityKey_UsingEntity()
             {
                 Person p = new Person
@@ -44,7 +44,7 @@ namespace DapperExtensions.Test.IntegrationTests.MySql
                 Console.WriteLine("Average Time:" + total / cnt);
             }
 
-            [Test]
+            [TestMethod]
             public void IdentityKey_UsingReturnValue()
             {
                 Person p = new Person
@@ -75,7 +75,7 @@ namespace DapperExtensions.Test.IntegrationTests.MySql
                 Console.WriteLine("Average Time:" + total / cnt);
             }
 
-            [Test]
+            [TestMethod]
             public void GuidKey_UsingEntity()
             {
                 Animal a = new Animal { Name = "Name" };
@@ -94,7 +94,7 @@ namespace DapperExtensions.Test.IntegrationTests.MySql
                 Console.WriteLine("Average Time:" + total / cnt);
             }
 
-            [Test]
+            [TestMethod]
             public void GuidKey_UsingReturnValue()
             {
                 Animal a = new Animal { Name = "Name" };
@@ -113,7 +113,7 @@ namespace DapperExtensions.Test.IntegrationTests.MySql
                 Console.WriteLine("Average Time:" + total / cnt);
             }
 
-            [Test]
+            [TestMethod]
             public void AssignKey_UsingEntity()
             {
                 Car ca = new Car { Id = string.Empty.PadLeft(15, '0'), Name = "Name" };
@@ -133,7 +133,7 @@ namespace DapperExtensions.Test.IntegrationTests.MySql
                 Console.WriteLine("Average Time:" + total / cnt);
             }
 
-            [Test]
+            [TestMethod]
             public void AssignKey_UsingReturnValue()
             {
                 Car ca = new Car { Id = string.Empty.PadLeft(15, '0'), Name = "Name" };

@@ -9,7 +9,7 @@ using System.Threading;
 using Dapper;
 using DapperExtensions.Mapper;
 using DapperExtensions.Sql;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DapperExtensions.Test.IntegrationTests.Sqlite
 {
@@ -17,7 +17,7 @@ namespace DapperExtensions.Test.IntegrationTests.Sqlite
     {
         protected IDatabase Db;
 
-        [SetUp]
+        [TestInitialize]
         public virtual void Setup()
         {
             string connectionString = string.Format("Data Source=.\\dapperTest_{0}.sqlite", Guid.NewGuid());
@@ -52,7 +52,7 @@ namespace DapperExtensions.Test.IntegrationTests.Sqlite
             }
         }
 
-        [TearDown]
+        [TestCleanup]
         public void TearDown()
         {
             string databaseName = Db.Connection.Database;
