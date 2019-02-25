@@ -3,11 +3,11 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using DapperExtensions.Mapper;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DapperExtensions.Test.Mapper
 {
-    [TestFixture]
+    [TestClass]
     public class PropertyMapFixture
     {
         private class Foo
@@ -16,7 +16,7 @@ namespace DapperExtensions.Test.Mapper
             public string Baz { get; set; }
         }
 
-        [Test]
+        [TestMethod]
         public void PropertyMap_Constructor_Sets_Name_And_ColumnName_Property_From_PropertyInfo()
         {
             Expression<Func<Foo, object>> expression = f => f.Bar;
@@ -26,7 +26,7 @@ namespace DapperExtensions.Test.Mapper
             Assert.AreEqual("Bar", pm.ColumnName);
         }
 
-        [Test]
+        [TestMethod]
         public void PropertyMap_Column_Sets_ColumnName_But_Does_Not_Change_Name()
         {
             Expression<Func<Foo, object>> expression = f => f.Baz;
@@ -37,7 +37,7 @@ namespace DapperExtensions.Test.Mapper
             Assert.AreEqual("X", pm.ColumnName);
         }
 
-        [Test]
+        [TestMethod]
         public void PropertyMap_Key_Sets_KeyType()
         {
             Expression<Func<Foo, object>> expression = f => f.Baz;

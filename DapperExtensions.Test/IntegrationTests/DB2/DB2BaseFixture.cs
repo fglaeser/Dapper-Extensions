@@ -7,8 +7,8 @@ using System.Text;
 using Dapper;
 using DapperExtensions.Mapper;
 using DapperExtensions.Sql;
-using IBM.Data.DB2;
-using NUnit.Framework;
+using IBM.Data.DB2.Core;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DapperExtensions.Test.IntegrationTests.DB2
 {
@@ -16,7 +16,7 @@ namespace DapperExtensions.Test.IntegrationTests.DB2
     {
         protected IDatabase Db;
 
-        [SetUp]
+        [TestInitialize]
         public virtual void Setup()
         {
             var connection = new DB2Connection("Server=localhost;Database=test;UID=db2admin;PWD=db2admin;CurrentSchema=db2admin;");

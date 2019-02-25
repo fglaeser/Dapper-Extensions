@@ -1,10 +1,10 @@
 using System;
 using System.Linq.Expressions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DapperExtensions.Test
 {
-    [TestFixture]
+    [TestClass]
     public class ReflectionHelperFixture
     {
         private class Foo
@@ -13,7 +13,7 @@ namespace DapperExtensions.Test
             public string Baz { get; set; }
         }
 
-        [Test]
+        [TestMethod]
         public void GetProperty_Returns_MemberInfo_For_Correct_Property()
         {
             Expression<Func<Foo, object>> expression = f => f.Bar;
@@ -21,7 +21,7 @@ namespace DapperExtensions.Test
             Assert.AreEqual("Bar", m.Name);
         }
 
-        [Test]
+        [TestMethod]
         public void GetObjectValues_Returns_Dictionary_With_Property_Value_Pairs()
         {
             Foo f = new Foo { Bar = 3, Baz = "Yum" };
@@ -31,7 +31,7 @@ namespace DapperExtensions.Test
             Assert.AreEqual("Yum", dictionary["Baz"]);
         }
 
-        [Test]
+        [TestMethod]
         public void GetObjectValues_Returns_Empty_Dictionary_When_Null_Object_Provided()
         {
             var dictionary = ReflectionHelper.GetObjectValues(null);

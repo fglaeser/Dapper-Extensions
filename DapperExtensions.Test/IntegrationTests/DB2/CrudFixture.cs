@@ -3,17 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DapperExtensions.Test.IntegrationTests.DB2.Data;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DapperExtensions.Test.IntegrationTests.DB2
 {
-    [TestFixture]
+    [TestClass]
     public class CrudFixture
     {
-        [TestFixture]
+        [TestClass]
         public class InsertMethod : DB2BaseFixture
         {
-            [Test]
+            [TestMethod]
             public void AddsEntityToDatabase_ReturnsKey()
             {
                 Person p = new Person { Active = 1, FirstName = "Foo", LastName = "Bar", DateCreated = DateTime.UtcNow };
@@ -22,7 +22,7 @@ namespace DapperExtensions.Test.IntegrationTests.DB2
                 Assert.AreEqual(1, p.Id);
             }
 
-            [Test]
+            [TestMethod]
             public void AddsEntityToDatabase_ReturnsCompositeKey()
             {
                 Multikey m = new Multikey { Key2 = "key", Value = "foo" };
@@ -31,7 +31,7 @@ namespace DapperExtensions.Test.IntegrationTests.DB2
                 Assert.AreEqual("key", key.Key2);
             }
 
-            [Test]
+            [TestMethod]
             public void AddsEntityToDatabase_ReturnsGeneratedPrimaryKey()
             {
                 Animal a1 = new Animal { Name = "Foo" };
@@ -42,7 +42,7 @@ namespace DapperExtensions.Test.IntegrationTests.DB2
                 Assert.AreEqual(a1.Id, a2.Id);
             }
 
-            [Test]
+            [TestMethod]
             public void AddsMultipleEntitiesToDatabase()
             {
                 Animal a1 = new Animal { Name = "Foo" };
@@ -56,10 +56,10 @@ namespace DapperExtensions.Test.IntegrationTests.DB2
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class GetMethod : DB2BaseFixture
         {
-            [Test]
+            [TestMethod]
             public void UsingKey_ReturnsEntity()
             {
                 Person p1 = new Person
@@ -77,7 +77,7 @@ namespace DapperExtensions.Test.IntegrationTests.DB2
                 Assert.AreEqual("Bar", p2.LastName);
             }
 
-            [Test]
+            [TestMethod]
             public void UsingCompositeKey_ReturnsEntity()
             {
                 Multikey m1 = new Multikey { Key2 = "key", Value = "bar" };
@@ -90,10 +90,10 @@ namespace DapperExtensions.Test.IntegrationTests.DB2
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class DeleteMethod : DB2BaseFixture
         {
-            [Test]
+            [TestMethod]
             public void UsingKey_DeletesFromDatabase()
             {
                 Person p1 = new Person
@@ -110,7 +110,7 @@ namespace DapperExtensions.Test.IntegrationTests.DB2
                 Assert.IsNull(Db.Get<Person>(id));
             }
 
-            [Test]
+            [TestMethod]
             public void UsingCompositeKey_DeletesFromDatabase()
             {
                 Multikey m1 = new Multikey { Key2 = "key", Value = "bar" };
@@ -121,7 +121,7 @@ namespace DapperExtensions.Test.IntegrationTests.DB2
                 Assert.IsNull(Db.Get<Multikey>(new { key.Key1, key.Key2 }));
             }
 
-            [Test]
+            [TestMethod]
             public void UsingPredicate_DeletesRows()
             {
                 Person p1 = new Person { Active = 1, FirstName = "Foo", LastName = "Bar", DateCreated = DateTime.UtcNow };
@@ -142,7 +142,7 @@ namespace DapperExtensions.Test.IntegrationTests.DB2
                 Assert.AreEqual(1, list.Count());
             }
 
-            [Test]
+            [TestMethod]
             public void UsingObject_DeletesRows()
             {
                 Person p1 = new Person { Active = 1, FirstName = "Foo", LastName = "Bar", DateCreated = DateTime.UtcNow };
@@ -163,10 +163,10 @@ namespace DapperExtensions.Test.IntegrationTests.DB2
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class UpdateMethod : DB2BaseFixture
         {
-            [Test]
+            [TestMethod]
             public void UsingKey_UpdatesEntity()
             {
                 Person p1 = new Person
@@ -190,7 +190,7 @@ namespace DapperExtensions.Test.IntegrationTests.DB2
                 Assert.AreEqual(0, p3.Active);
             }
 
-            [Test]
+            [TestMethod]
             public void UsingCompositeKey_UpdatesEntity()
             {
                 Multikey m1 = new Multikey { Key2 = "key", Value = "bar" };
@@ -208,10 +208,10 @@ namespace DapperExtensions.Test.IntegrationTests.DB2
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class GetListMethod : DB2BaseFixture
         {
-            [Test]
+            [TestMethod]
             public void UsingNullPredicate_ReturnsAll()
             {
                 Db.Insert(new Person { Active = 1, FirstName = "a", LastName = "a1", DateCreated = DateTime.UtcNow });
@@ -223,7 +223,7 @@ namespace DapperExtensions.Test.IntegrationTests.DB2
                 Assert.AreEqual(4, list.Count());
             }
 
-            [Test]
+            [TestMethod]
             public void UsingPredicate_ReturnsMatching()
             {
                 Db.Insert(new Person { Active = 1, FirstName = "a", LastName = "a1", DateCreated = DateTime.UtcNow });
@@ -237,7 +237,7 @@ namespace DapperExtensions.Test.IntegrationTests.DB2
                 Assert.IsTrue(list.All(p => p.FirstName == "a" || p.FirstName == "c"));
             }
 
-            [Test]
+            [TestMethod]
             public void UsingObject_ReturnsMatching()
             {
                 Db.Insert(new Person { Active = 1, FirstName = "a", LastName = "a1", DateCreated = DateTime.UtcNow });
@@ -252,10 +252,10 @@ namespace DapperExtensions.Test.IntegrationTests.DB2
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class GetPageMethod : DB2BaseFixture
         {
-            [Test]
+            [TestMethod]
             public void UsingNullPredicate_ReturnsMatching()
             {
                 var id1 = Db.Insert(new Person { Active = 1, FirstName = "Sigma", LastName = "Alpha", DateCreated = DateTime.UtcNow });
@@ -275,7 +275,7 @@ namespace DapperExtensions.Test.IntegrationTests.DB2
                 Assert.AreEqual(id1, list.Skip(1).First().Id);
             }
 
-            [Test]
+            [TestMethod]
             public void UsingPredicate_ReturnsMatching()
             {
                 var id1 = Db.Insert(new Person { Active = 1, FirstName = "Sigma", LastName = "Alpha", DateCreated = DateTime.UtcNow });
@@ -295,7 +295,7 @@ namespace DapperExtensions.Test.IntegrationTests.DB2
                 Assert.IsTrue(list.All(p => p.FirstName == "Sigma" || p.FirstName == "Theta"));
             }
 
-            [Test]
+            [TestMethod]
             public void NotFirstPage_Returns_NextResults()
             {
                 var id1 = Db.Insert(new Person { Active = 1, FirstName = "Sigma", LastName = "Alpha", DateCreated = DateTime.UtcNow });
@@ -315,7 +315,7 @@ namespace DapperExtensions.Test.IntegrationTests.DB2
                 Assert.AreEqual(id3, list.Skip(1).First().Id);
             }
 
-            [Test]
+            [TestMethod]
             public void UsingObject_ReturnsMatching()
             {
                 var id1 = Db.Insert(new Person { Active = 1, FirstName = "Sigma", LastName = "Alpha", DateCreated = DateTime.UtcNow });
@@ -336,10 +336,10 @@ namespace DapperExtensions.Test.IntegrationTests.DB2
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class CountMethod : DB2BaseFixture
         {
-            [Test]
+            [TestMethod]
             public void UsingNullPredicate_Returns_Count()
             {
                 Db.Insert(new Person { Active = 1, FirstName = "a", LastName = "a1", DateCreated = DateTime.UtcNow.AddDays(-10) });
@@ -351,7 +351,7 @@ namespace DapperExtensions.Test.IntegrationTests.DB2
                 Assert.AreEqual(4, count);
             }
 
-            [Test]
+            [TestMethod]
             public void UsingPredicate_Returns_Count()
             {
                 Db.Insert(new Person { Active = 1, FirstName = "a", LastName = "a1", DateCreated = DateTime.UtcNow.AddDays(-10) });
@@ -364,7 +364,7 @@ namespace DapperExtensions.Test.IntegrationTests.DB2
                 Assert.AreEqual(2, count);
             }
 
-            [Test]
+            [TestMethod]
             public void UsingObject_Returns_Count()
             {
                 Db.Insert(new Person { Active = 1, FirstName = "a", LastName = "a1", DateCreated = DateTime.UtcNow.AddDays(-10) });
@@ -378,10 +378,10 @@ namespace DapperExtensions.Test.IntegrationTests.DB2
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class GetMultipleMethod : DB2BaseFixture
         {
-            [Test]
+            [TestMethod]
             public void ReturnsItems()
             {
                 Db.Insert(new Person { Active = 1, FirstName = "a", LastName = "a1", DateCreated = DateTime.UtcNow.AddDays(-10) });

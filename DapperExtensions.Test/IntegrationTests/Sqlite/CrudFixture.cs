@@ -3,17 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DapperExtensions.Test.Data;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DapperExtensions.Test.IntegrationTests.Sqlite
 {
-    [TestFixture]
+    [TestClass]
     public class CrudFixture
     {
-        [TestFixture]
+        [TestClass]
         public class InsertMethod : SqliteBaseFixture
         {
-            [Test]
+            [TestMethod, TestCategory("Sqlite")]
             public void AddsEntityToDatabase_ReturnsKey()
             {
                 Person p = new Person { Active = true, FirstName = "Foo", LastName = "Bar", DateCreated = DateTime.UtcNow };
@@ -22,7 +22,7 @@ namespace DapperExtensions.Test.IntegrationTests.Sqlite
                 Assert.AreEqual(1, p.Id);
             }
 
-            [Test]
+            [TestMethod]
             [Ignore] //TODO: multikey identity
             public void AddsEntityToDatabase_ReturnsCompositeKey()
             {
@@ -32,7 +32,7 @@ namespace DapperExtensions.Test.IntegrationTests.Sqlite
                 Assert.AreEqual("key", key.Key2);
             }
 
-            [Test]
+            [TestMethod]
             public void AddsEntityToDatabase_ReturnsGeneratedPrimaryKey()
             {
                 Animal a1 = new Animal { Name = "Foo" };
@@ -43,7 +43,7 @@ namespace DapperExtensions.Test.IntegrationTests.Sqlite
                 Assert.AreEqual(a1.Id, a2.Id);
             }
 
-            [Test]
+            [TestMethod]
             public void AddsEntityToDatabase_WithPassedInGuid()
             {
                 var guid = Guid.NewGuid();
@@ -55,7 +55,7 @@ namespace DapperExtensions.Test.IntegrationTests.Sqlite
                 Assert.AreEqual(guid, a2.Id);
             }
 
-            [Test]
+            [TestMethod]
             public void AddsMultipleEntitiesToDatabase()
             {
                 Animal a1 = new Animal { Name = "Foo" };
@@ -68,7 +68,7 @@ namespace DapperExtensions.Test.IntegrationTests.Sqlite
                 Assert.AreEqual(3, animals.Count);
             }
 
-            [Test]
+            [TestMethod]
             public void AddsMultipleEntitiesToDatabase_WithPassedInGuid()
             {
                 var guid1 = Guid.NewGuid();
@@ -88,10 +88,10 @@ namespace DapperExtensions.Test.IntegrationTests.Sqlite
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class GetMethod : SqliteBaseFixture
         {
-            [Test]
+            [TestMethod]
             public void UsingKey_ReturnsEntity()
             {
                 Person p1 = new Person
@@ -109,7 +109,7 @@ namespace DapperExtensions.Test.IntegrationTests.Sqlite
                 Assert.AreEqual("Bar", p2.LastName);
             }
 
-            [Test]
+            [TestMethod]
             [Ignore] //TODO: multikey identity
             public void UsingCompositeKey_ReturnsEntity()
             {
@@ -123,10 +123,10 @@ namespace DapperExtensions.Test.IntegrationTests.Sqlite
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class DeleteMethod : SqliteBaseFixture
         {
-            [Test]
+            [TestMethod]
             public void UsingKey_DeletesFromDatabase()
             {
                 Person p1 = new Person
@@ -143,7 +143,7 @@ namespace DapperExtensions.Test.IntegrationTests.Sqlite
                 Assert.IsNull(Db.Get<Person>(id));
             }
 
-            [Test]
+            [TestMethod]
             [Ignore] //TODO: multikey identity
             public void UsingCompositeKey_DeletesFromDatabase()
             {
@@ -155,7 +155,7 @@ namespace DapperExtensions.Test.IntegrationTests.Sqlite
                 Assert.IsNull(Db.Get<Multikey>(new { key.Key1, key.Key2 }));
             }
 
-            [Test]
+            [TestMethod]
             public void UsingPredicate_DeletesRows()
             {
                 Person p1 = new Person { Active = true, FirstName = "Foo", LastName = "Bar", DateCreated = DateTime.UtcNow };
@@ -176,7 +176,7 @@ namespace DapperExtensions.Test.IntegrationTests.Sqlite
                 Assert.AreEqual(1, list.Count());
             }
 
-            [Test]
+            [TestMethod]
             public void UsingObject_DeletesRows()
             {
                 Person p1 = new Person { Active = true, FirstName = "Foo", LastName = "Bar", DateCreated = DateTime.UtcNow };
@@ -197,10 +197,10 @@ namespace DapperExtensions.Test.IntegrationTests.Sqlite
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class UpdateMethod : SqliteBaseFixture
         {
-            [Test]
+            [TestMethod]
             public void UsingKey_UpdatesEntity()
             {
                 Person p1 = new Person
@@ -224,7 +224,7 @@ namespace DapperExtensions.Test.IntegrationTests.Sqlite
                 Assert.AreEqual(false, p3.Active);
             }
 
-            [Test]
+            [TestMethod]
             [Ignore] //TODO: multikey identity
             public void UsingCompositeKey_UpdatesEntity()
             {
@@ -243,10 +243,10 @@ namespace DapperExtensions.Test.IntegrationTests.Sqlite
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class GetListMethod : SqliteBaseFixture
         {
-            [Test]
+            [TestMethod]
             public void UsingNullPredicate_ReturnsAll()
             {
                 Db.Insert(new Person { Active = true, FirstName = "a", LastName = "a1", DateCreated = DateTime.UtcNow });
@@ -258,7 +258,7 @@ namespace DapperExtensions.Test.IntegrationTests.Sqlite
                 Assert.AreEqual(4, list.Count());
             }
 
-            [Test]
+            [TestMethod]
             public void UsingPredicate_ReturnsMatching()
             {
                 Db.Insert(new Person { Active = true, FirstName = "a", LastName = "a1", DateCreated = DateTime.UtcNow });
@@ -272,7 +272,7 @@ namespace DapperExtensions.Test.IntegrationTests.Sqlite
                 Assert.IsTrue(list.All(p => p.FirstName == "a" || p.FirstName == "c"));
             }
 
-            [Test]
+            [TestMethod]
             public void UsingObject_ReturnsMatching()
             {
                 Db.Insert(new Person { Active = true, FirstName = "a", LastName = "a1", DateCreated = DateTime.UtcNow });
@@ -287,10 +287,10 @@ namespace DapperExtensions.Test.IntegrationTests.Sqlite
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class GetPageMethod : SqliteBaseFixture
         {
-            [Test]
+            [TestMethod]
             public void UsingNullPredicate_ReturnsMatching()
             {
                 var id1 = Db.Insert(new Person { Active = true, FirstName = "Sigma", LastName = "Alpha", DateCreated = DateTime.UtcNow });
@@ -310,7 +310,7 @@ namespace DapperExtensions.Test.IntegrationTests.Sqlite
                 Assert.AreEqual(id1, list.Skip(1).First().Id);
             }
 
-            [Test]
+            [TestMethod]
             public void UsingPredicate_ReturnsMatching()
             {
                 var id1 = Db.Insert(new Person { Active = true, FirstName = "Sigma", LastName = "Alpha", DateCreated = DateTime.UtcNow });
@@ -330,7 +330,7 @@ namespace DapperExtensions.Test.IntegrationTests.Sqlite
                 Assert.IsTrue(list.All(p => p.FirstName == "Sigma" || p.FirstName == "Theta"));
             }
 
-            [Test]
+            [TestMethod]
             public void NotFirstPage_Returns_NextResults()
             {
                 var id1 = Db.Insert(new Person { Active = true, FirstName = "Sigma", LastName = "Alpha", DateCreated = DateTime.UtcNow });
@@ -350,7 +350,7 @@ namespace DapperExtensions.Test.IntegrationTests.Sqlite
                 Assert.AreEqual(id3, list.Skip(1).First().Id);
             }
 
-            [Test]
+            [TestMethod]
             public void UsingObject_ReturnsMatching()
             {
                 var id1 = Db.Insert(new Person { Active = true, FirstName = "Sigma", LastName = "Alpha", DateCreated = DateTime.UtcNow });
@@ -371,10 +371,10 @@ namespace DapperExtensions.Test.IntegrationTests.Sqlite
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class CountMethod : SqliteBaseFixture
         {
-            [Test]
+            [TestMethod]
             public void UsingNullPredicate_Returns_Count()
             {
                 Db.Insert(new Person { Active = true, FirstName = "a", LastName = "a1", DateCreated = DateTime.UtcNow.AddDays(-10) });
@@ -386,7 +386,7 @@ namespace DapperExtensions.Test.IntegrationTests.Sqlite
                 Assert.AreEqual(4, count);
             }
 
-            [Test]
+            [TestMethod]
             public void UsingPredicate_Returns_Count()
             {
                 Db.Insert(new Person { Active = true, FirstName = "a", LastName = "a1", DateCreated = DateTime.UtcNow.AddDays(-10) });
@@ -399,7 +399,7 @@ namespace DapperExtensions.Test.IntegrationTests.Sqlite
                 Assert.AreEqual(2, count);
             }
 
-            [Test]
+            [TestMethod]
             public void UsingObject_Returns_Count()
             {
                 Db.Insert(new Person { Active = true, FirstName = "a", LastName = "a1", DateCreated = DateTime.UtcNow.AddDays(-10) });
@@ -413,10 +413,10 @@ namespace DapperExtensions.Test.IntegrationTests.Sqlite
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class GetMultipleMethod : SqliteBaseFixture
         {
-            [Test]
+            [TestMethod]
             public void ReturnsItems()
             {
                 Db.Insert(new Person { Active = true, FirstName = "a", LastName = "a1", DateCreated = DateTime.UtcNow.AddDays(-10) });

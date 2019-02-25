@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DapperExtensions.Sql;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DapperExtensions.Test.Sql
 {
@@ -12,17 +12,17 @@ namespace DapperExtensions.Test.Sql
         {
             protected SqlCeDialect Dialect;
 
-            [SetUp]
+            [TestInitialize]
             public void Setup()
             {
                 Dialect = new SqlCeDialect();
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class Properties : SqlCeDialectFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void CheckSettings()
             {
                 Assert.AreEqual('[', Dialect.OpenQuote);
@@ -33,40 +33,40 @@ namespace DapperExtensions.Test.Sql
             }
         }
 
-        [TestFixture]
+        [TestClass]
         public class GetTableNameMethod : SqlCeDialectFixtureBase
         {
-            [Test]
+            [TestMethod]
             public void NullTableName_ThrowsException()
             {
-                var ex = Assert.Throws<ArgumentNullException>(() => Dialect.GetTableName(null, null, null));
+                var ex = Assert.ThrowsException<ArgumentNullException>(() => Dialect.GetTableName(null, null, null));
                 Assert.AreEqual("TableName", ex.ParamName);
                 StringAssert.Contains("cannot be null", ex.Message);
             }
 
-            [Test]
+            [TestMethod]
             public void EmptyTableName_ThrowsException()
             {
-                var ex = Assert.Throws<ArgumentNullException>(() => Dialect.GetTableName(null, string.Empty, null));
+                var ex = Assert.ThrowsException<ArgumentNullException>(() => Dialect.GetTableName(null, string.Empty, null));
                 Assert.AreEqual("TableName", ex.ParamName);
                 StringAssert.Contains("cannot be null", ex.Message);
             }
 
-            [Test]
+            [TestMethod]
             public void TableNameOnly_ReturnsProperlyQuoted()
             {
                 string result = Dialect.GetTableName(null, "foo", null);
                 Assert.AreEqual("[foo]", result);
             }
 
-            [Test]
+            [TestMethod]
             public void SchemaAndTable_ReturnsProperlyQuoted()
             {
                 string result = Dialect.GetTableName("bar", "foo", null);
                 Assert.AreEqual("[bar_foo]", result);
             }
 
-            [Test]
+            [TestMethod]
             public void AllParams_ReturnsProperlyQuoted()
             {
                 string result = Dialect.GetTableName("bar", "foo", "al");
