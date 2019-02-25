@@ -15,3 +15,6 @@ StyleCop.*
 
 # Nuget
 packages
+artifacts/
+
+tools/
