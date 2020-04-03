@@ -63,7 +63,7 @@ Task("Push").IsDependentOn("Pack")
     {
      var settings = new DotNetCoreNuGetPushSettings
      {
-         Source = "http://nuget.test.andreani.com.ar/nuget/andreani",
+         Source = "http://baget.apps.andreani.com.ar/v3/index.json",
          ApiKey = "04071421"
      };
      DotNetCoreNuGetPush($".\\artifacts\\*.nupkg", settings);

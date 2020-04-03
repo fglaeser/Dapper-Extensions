@@ -1,10 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-    <AssemblyVersion>1.7.0.0</AssemblyVersion>
-    <FileVersion>1.7.0.0</FileVersion>
-    <Version>1.7.0</Version>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+    <AssemblyVersion>1.8.0.0</AssemblyVersion>
+    <FileVersion>1.8.0.0</FileVersion>
+    <Version>1.8.0-beta2</Version>
     <Description>A small library that complements Dapper by adding basic CRUD operations (Get, Insert, Update, Delete) for your POCOs. For more advanced querying scenarios, Dapper Extensions provides a predicate system.</Description>
     <Authors>Thad Smith, Page Brooks</Authors>
     <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
@@ -12,8 +12,7 @@
     <PackageTags>Dapper micro-orm orm sql Data</PackageTags>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/fglaeser/Dapper-Extensions</RepositoryUrl>
-    <PackageReleaseNotes>1.7.0
-* Net Core Migration.</PackageReleaseNotes>
+    <PackageReleaseNotes>Set target framework to netstandard2.0 and netstandard2.1</PackageReleaseNotes>
     <Company />
   </PropertyGroup>
 
@@ -42,7 +41,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="1.50.7" />
+    <PackageReference Include="Dapper" Version="2.0.30" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>
